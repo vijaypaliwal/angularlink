@@ -1,0 +1,827 @@
+<div class="settings-cog fixed flex items-center justify-center right-0 w-10 h-10  rounded-lg z-90 cursor-pointer bg-primary-600 bg-opacity-90 print:hidden"
+    [class.lg:right-0]="config.layout === 'centered' || config.layout === 'material' || config.layout ==='modern'"
+    [class.lg:right-16]="config.layout !== 'centered' && config.layout !== 'material'&& config.layout !== 'modern' "
+    style="top: 20px" (click)="settingsDrawer.toggle()">
+    <mat-icon class="icon-size-5 text-white" [svgIcon]="'heroicons_solid:cog'"></mat-icon>
+</div>
+
+
+<fuse-drawer class="w-screen min-w-screen sm:w-100 sm:min-w-100 z-999" fixed [mode]="'over'" [name]="'settingsDrawer'"
+    [position]="'right'" #settingsDrawer [ngClass]="isScreenSmall? '' : 'drawerWidth' ">
+
+    <div class="flex flex-col w-full overflow-auto bg-card">
+        <div class="flex flex-row items-center px-6 h-20 min-h-20 text-white bg-primary">
+            <mat-icon class="icon-size-7 text-current" [svgIcon]="'heroicons_solid:cog'"></mat-icon>
+            <div class="ml-3 text-2xl font-semibold tracking-tight">Settings</div>
+            <button class="ml-auto" [disabled]="loadingSpinner" [color]="'secondary'" mat-button (click)="saveLayout()"
+                (click)="settingsDrawer.close()">
+                <mat-spinner class=" text-blue-600" *ngIf="loadingSpinner" diameter="16">
+                </mat-spinner>
+                <mat-icon class="text-current" *ngIf="!loadingSpinner" [svgIcon]="'heroicons_outline:check'"></mat-icon>
+                {{configId?'Update':'Save'}} Setting
+            </button>
+            <button mat-icon-button (click)="settingsDrawer.close()">
+                <mat-icon class="text-current" [svgIcon]="'heroicons_outline:x'"></mat-icon>
+            </button>
+        </div>
+        <div class="flex flex-col p-6">
+            <!-- Layout -->
+
+            <ng-container *ngIf="config.view==='list'">
+                <!-- Theme -->
+                <div class="text-md font-semibold text-secondary">THEME</div>
+                <div class="grid grid-cols-2 lg:grid-cols-4 sm:grid-cols-3 gap-3 mt-6">
+                    <ng-container *ngFor="let theme of config.themes">
+                        <div class="flex items-center justify-center px-4 py-3 rounded-full cursor-pointer ring-inset ring-primary bg-hover"
+                            [class.ring-2]="config.theme === theme.id" [ngClass]="theme.id"
+                            (click)="setTheme(theme.id)">
+                            <div class="flex-0 w-3 h-3 rounded-full bg-primary"></div>
+                            <div class="ml-2.5 font-medium leading-5 truncate"
+                                [class.text-secondary]="config.theme !== theme.id">
+                                {{theme.name}}
+                            </div>
+                        </div>
+                    </ng-container>
+                </div>
+
+
+            </ng-container>
+            <ng-container *ngIf="config.view==='grid'">
+                <div class="text-md font-semibold text-secondary">GRID LAYOUT</div>
+
+                <div class="grid grid-cols-2 gap-2 justify-center mt-5">
+
+                    <!-- card-1 -->
+                    <fuse-card [ngClass]="config.gridLayout==='grid-1' ? 'selected-card':'gray-border'"
+                        class="flex flex-col max-w-80 w-full filter-article filter-interactive m-2 container positionButton">
+
+
+                        <div class="overlay"></div>
+                        <div class="buttonOnCard">
+                            <button (click)="setGridLayout('grid-1')" mat-flat-button [color]="'primary'">
+                                Add This Layout
+                            </button>
+                        </div>
+                        <div class="absolute flex flex-col top-0 right-0 p-3">
+                            <button mat-icon-button>
+                                <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:dots-vertical'">
+                                </mat-icon>
+                            </button>
+
+                        </div>
+                        <mat-checkbox [(ngModel)]="checkbox" style="position: absolute;left: 15px;top: 15px;"
+                            [color]="'primary'">
+                        </mat-checkbox>
+
+                        <img class="object-cover"
+                            src="https://m.media-amazon.com/images/S/al-eu-726f4d26-7fdb/276d9359-6b39-4eae-a2ee-8734ab663cdd._CR0,0,1200,628_SX430_QL70_.jpg"
+                            alt="DF">
+
+                        <div class="m-8 mb-4">
+                            <div class="text-2xl font-semibold leading-tight line-clamp-1">Spread Collar & Full Sleeves
+                            </div>
+                            <div class="text-secondary text-md mt-1">Update on : 6/1/23</div>
+                            <div class="mt-4">Dennis Lingo Men's Solid Slim Fit Cotton Casual Shirt with Spread
+                                Collar & Full Sleeves</div>
+                            <div class="mt-3 -mx-3">
+                                <button class="px-3" mat-button [color]="'primary'">
+                                    <span class="mr-1">More Details</span>
+
+                                </button>
+                            </div>
+                        </div>
+
+
+
+
+
+                    </fuse-card>
+
+
+                    <!-- card-2 -->
+                    <fuse-card [ngClass]="config.gridLayout==='grid-2' ? 'selected-card':'gray-border'"
+                        class="flex flex-col max-w-80 w-full p-8 pb-4 filter-article m-2 container positionButton">
+                        <div class="overlay"></div>
+                        <div class="buttonOnCard">
+                            <button (click)="setGridLayout('grid-2')" mat-flat-button [color]="'primary'">
+                                Add This Layout
+                            </button>
+                        </div>
+                        <div class="flex items-center">
+
+                            <img class="w-20 rounded-lg object-cover"
+                                src="https://m.media-amazon.com/images/I/618Wek95laS._UY741_.jpg" alt="df">
+                            <div class="flex flex-col ml-6">
+                                <div class="text-2xl font-semibold leading-tight">Spread Collar & Full Sleeves</div>
+                                <div class="text-secondary font-medium text-md">Update on : 6/1/23</div>
+                            </div>
+                        </div>
+                        <div class="mt-6 text-sm">Dennis Lingo Men's Solid Slim Fit Cotton Casual Shirt with Spread
+                            Collar & Full Sleeves</div>
+                        <div class="w-full flex items-center justify-between my-4">
+
+                            <div class="flex flex-col">
+                                <span class="font-bold">Product Type</span>
+                                <span class="text-sm font-medium text-secondary">Men shirt</span>
+                            </div>
+                            <div class="flex flex-col">
+                                <span class="font-bold">Standard Cost</span>
+                                <span class="text-sm font-medium text-secondary">$480</span>
+                            </div>
+
+
+
+                        </div>
+
+                        <div class="mt-3 -mx-3">
+                            <button class="px-3" mat-button [color]="'primary'">
+                                <span class="mr-1">More Details</span>
+
+                            </button>
+                        </div>
+                    </fuse-card>
+
+                    <!-- Card #3 -->
+                    <fuse-card [ngClass]="config.gridLayout==='grid-3' ? 'selected-card':'gray-border'"
+                        class="flex flex-col max-w-80 w-full p-8 filter-article m-2 container positionButton">
+                        <div class="overlay"></div>
+                        <div class="buttonOnCard">
+                            <button (click)="setGridLayout('grid-3')" mat-flat-button [color]="'primary'">
+                                Add This Layout
+                            </button>
+                        </div>
+                        <div class="text-2xl font-semibold leading-tight">Spread Collar & Full Sleeves</div>
+                        <div class="text-secondary text-md mt-1">Update on : 6/1/23 at Block-A</div>
+                        <div class="mt-4">
+                            Dennis Lingo Men's Solid Slim Fit Cotton Casual Shirt with Spread
+                            Collar & Full Sleeves.
+                        </div>
+                        <div class="w-full flex items-center justify-between my-4">
+
+                            <div class="flex flex-col items-center">
+                                <span class="font-bold">Product Type</span>
+                                <span class="text-sm font-medium text-secondary">Men shirt</span>
+                            </div>
+                            <div class="flex flex-col items-center">
+                                <span class="font-bold">Standard Cost</span>
+                                <span class="text-sm font-medium text-secondary">$480</span>
+                            </div>
+
+                        </div>
+                        <div class="mt-3 -mx-3">
+                            <a class="px-3" mat-button [color]="'primary'">
+                                More Details
+                            </a>
+                        </div>
+                    </fuse-card>
+
+                    <!-- Card #4 -->
+                    <fuse-card [ngClass]="config.gridLayout==='grid-4' ? 'selected-card':'gray-border'"
+                        class="flex flex-col max-w-80 w-full p-8 pb-4 m-2 filter-article container positionButton">
+                        <div class="overlay"></div>
+                        <div class="buttonOnCard">
+                            <button (click)="setGridLayout('grid-4')" mat-flat-button [color]="'primary'">
+                                Add This Layout
+                            </button>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <div class="flex flex-col mr-6">
+                                <div class="text-2xl font-semibold leading-tight">Spread Collar & Full Sleeves</div>
+                                <div class="text-secondary font-medium text-md">Update on : 6/1/23</div>
+                            </div>
+                            <img class="w-20 rounded-lg object-cover"
+                                src="https://m.media-amazon.com/images/I/618Wek95laS._UY741_.jpg"
+                                alt="Card cover image">
+                        </div>
+                        <div class="mt-6">Dennis Lingo Men's Solid Slim Fit Cotton Casual Shirt with Spread
+                            Collar & Full Sleeves.</div>
+                        <div class="mt-3 -mx-3">
+                            <a class="px-3" mat-button [color]="'primary'">
+                                More Details
+                            </a>
+                        </div>
+                    </fuse-card>
+                    <!-- Card #5 -->
+                    <fuse-card [ngClass]="config.gridLayout==='grid-5' ? 'selected-card':'gray-border'"
+                        class="flex flex-col items-center max-w-80 w-full p-8  m-2 filter-info container positionButton">
+                        <div class="overlay"></div>
+                        <div class="buttonOnCard">
+                            <button (click)="setGridLayout('grid-5')" mat-flat-button [color]="'primary'">
+                                Add This Layout
+                            </button>
+                        </div>
+                        <div class="flex items-center justify-center p-1 rounded-full bg-primary-100 dark:bg-gray-600">
+
+                            <img class="w-32 h-32 rounded-full"
+                                src="https://sc04.alicdn.com/kf/H76958e59f7674c8e80d33433ef8e3620r.jpg"
+                                alt="Card cover image">
+                        </div>
+                        <div class="text-2xl font-semibold leading-tight text-center mt-6">Mens Shoes
+                        </div>
+                        <div class="text-center text-secondary mt-3">Dennis Lingo Men's Solid Slim Fit Cotton Casual
+                            Shirt with Spread
+                            Collar & Full Sleeves.</div>
+                        <a class="px-6 mt-8" mat-flat-button [color]="'primary'">
+                            More Details
+                        </a>
+                    </fuse-card>
+
+                    <!-- 
+                    <div class="flex flex-col max-w-80 light w-full positionButton container filter-article">
+                        <img class="object-cover" src="https://m.media-amazon.com/images/I/618Wek95laS._UY741_.jpg"
+                            alt="Card cover image">
+                        <div class="overlay"></div>
+                        <div class="buttonOnCard">
+                            <button (click)="setGridLayout('grid-3')" mat-flat-button [color]="'primary'">
+                                Add This Layout
+                            </button>
+                        </div>
+                        <div class="mx-4 my-3 ">
+                            <div class="text-xl font-semibold leading-tight">Spread Collar & Full Sleeves</div>
+                            <div class="text-secondary text-md mt-1">Update on : 6/1/23</div>
+                            <div class="mt-2 -mx-3">
+                                <a class="px-3 text-sm" mat-button [color]="'primary'">
+                                    More Details
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex flex-col max-w-80 w-full container light p-3 pb-4 filter-article positionButton">
+                        <div class="absolute flex flex-col top-0 right-0 p-3">
+                            <button mat-icon-button>
+                                <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:dots-vertical'">
+                                </mat-icon>
+                            </button>
+                        </div>
+                        <mat-checkbox style="position: absolute;left: 15px;top: 15px;" [color]="'primary'">
+                        </mat-checkbox>
+                        <div class="flex items-center">
+                            <img class="w-20 rounded-lg object-cover"
+                                src="https://m.media-amazon.com/images/I/618Wek95laS._UY741_.jpg"
+                                alt="Card cover image">
+                            <div class="overlay"></div>
+                            <div class="buttonOnCard">
+                                <button (click)="setGridLayout('grid-2')" mat-flat-button [color]="'primary'">
+                                    Add This Layout
+                                </button>
+                            </div>
+                            <div class="flex flex-col ml-3">
+                                <div class="text-2xl font-semibold leading-tight">Spread Collar & Full Sleeves</div>
+                                <div class="text-secondary text-md font-medium text-md">Update on : 6/1/23</div>
+                            </div>
+                        </div>
+                        <div class="mt-6 text-sm">Dennis Lingo Men's Solid Slim Fit Cotton Casual Shirt with Spread
+                            Collar & Full Sleeves</div>
+
+                        <div class="mt-3 -mx-3">
+                            <a class="px-3 text-sm" mat-button [color]="'primary'">
+                                More Details
+                            </a>
+                        </div>
+                    </div>
+                    <div class="flex flex-col max-w-80 container light w-full filter-article positionButton">
+                        <div class="overlay"></div>
+                        <div class="buttonOnCard">
+                            <button mat-flat-button (click)="setGridLayout('grid-1')" [color]="'primary'">
+                                Add This Layout
+                            </button>
+                        </div>
+                        <div class="m-8 mb-4">
+                            <div class="text-xl font-semibold leading-tight">Most beautiful</div>
+
+                            <div class="mt-4 text-sm">
+                                From rocky mountains to crystal clear lakes, these are the places you must see and
+                                enjoy.
+                                In summers you can bring your food and have..
+                                <div class="grid grid-cols-3 gap-4 mt-2">
+                                    <span class="font-semibold">
+                                        column1
+                                    </span>
+                                    <span class="font-semibold">
+                                        column2
+                                    </span>
+                                    <span class="font-semibold">
+                                        column3
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="mt-3 -mx-3">
+                                <a class="px-3 text-sm" mat-button [color]="'primary'" [routerLink]="['./']">
+                                    Read More
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="flex flex-col max-w-80 w-full p-3 positionButton container pb-4 light filter-article">
+                        <div class="flex items-center justify-between relative">
+                            <div class="flex flex-col mr-3">
+                                <div class="text-md font-semibold leading-tight">Mountain tops</div>
+                                <div class="text-secondary text-md font-medium text-md">Travel locations</div>
+                            </div>
+                            <img class="w-20 rounded-lg object-cover"
+                                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR0lDueLzcjMMdPpjITXP_Wa_R7CFtCH-tHLsZZnVyb&s"
+                                alt="Card cover image">
+                            <div class="overlay"></div>
+                            <div class="buttonOnCard">
+                                <button (click)="setGridLayout('grid-4')" mat-flat-button [color]="'primary'">
+                                    Add This Layout
+                                </button>
+                            </div>
+                        </div>
+                        <div class="mt-6 text-sm">From rocky mountains to crystal clear lakes, these are the places you
+                            must
+                            see and
+                            enjoy. Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime suscipit sequi
+                            voluptate!
+                        </div>
+                        <div class="grid grid-cols-3 gap-4 mt-4">
+                            <span class="text-sm font-semibold">
+                                column1
+                            </span>
+                            <span class="text-sm font-semibold">
+                                column2
+                            </span>
+                            <span class="text-sm font-semibold">
+                                column3
+                            </span>
+                        </div>
+                        <div class="mt-3 -mx-3">
+                            <a class="px-3 text-sm" mat-button [color]="'primary'" [routerLink]="['./']">
+                                Read More
+                            </a>
+                        </div>
+                    </div> -->
+                </div>
+            </ng-container>
+
+            <ng-container *ngIf="config.view==='card'">
+                <div class=" text-md font-semibold text-secondary">CARD LAYOUT</div>
+
+                <!-- 1 -->
+                <div [ngClass]="config.cardLayout==='card-1' ? 'selected-card':'gray-border'"
+                    class="flex container flex-col mt-5 md:flex-row sm:flex-row positionButton rounded-lg md:max-w-240 w-full filter-listing light">
+
+                    <div>
+                        <img class="w-full object-cover imgHover" style="max-height: 367px;"
+                            src="https://assets.ajio.com/medias/sys_master/root/20220819/Qm9w/62fe856aaeb269176183efe0/-473Wx593H-461124702-black-MODEL.jpg"
+                            alt="Card cover image">
+                    </div>
+                    <div class="overlay"></div>
+                    <div class="buttonOnCard">
+                        <button (click)="setCardLayout('card-1')" mat-flat-button [color]="'primary'">
+                            Add This Layout
+                        </button>
+                    </div>
+                    <div class="flex flex-col flex-auto ml-5 mt-3 mb-4">
+                        <div class="text-lg w-100 p-2 font-semibold mt-0 leading-tight">Inkast Denim Co. Men Shirt</div>
+                        <button class="absolute right-0 mr-2" style="top: 5px;" mat-icon-button
+                            [matMenuTriggerFor]="listCard01Menu">
+                            <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:dots-vertical'">
+                            </mat-icon>
+                        </button>
+                        <div class="text-sm p-2 pt-0">
+                            Stylish striped shirt with Mandarin collar for everyday casual wear. use shoe bags to
+                            prevent any stains or mildew. This is applicable across sellers.
+                        </div>
+                        <div class="mt-1 ml-2">
+                            <div class="grid grid-cols-3 gap-2">
+                                <div>
+                                    <div class="font-semibold">
+                                        SKU
+
+                                    </div>
+                                    <div class="text-secondary text-md">
+                                        A1LVVGJ3
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="font-semibold">
+                                        Standard Cost
+                                    </div>
+                                    <div class="text-secondary text-md">
+                                        $599
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="font-semibold">
+                                        Product Type
+                                    </div>
+                                    <div class="text-secondary text-md">
+                                        Cloth
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="font-semibold">
+                                        List Price
+                                    </div>
+                                    <div class="text-secondary text-md">
+                                        $0
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="font-semibold">
+                                        Sleeves
+                                    </div>
+                                    <div class="text-secondary text-md">
+                                        Full
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="font-semibold">
+                                        Weight
+                                    </div>
+                                    <div class="text-secondary text-md">
+                                        Light
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="font-semibold">
+                                        Material
+                                    </div>
+                                    <div class="text-secondary text-md">
+                                        Cotton
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="font-semibold">
+                                        Warranty
+                                    </div>
+                                    <div class="text-secondary text-md">
+                                        5 year
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <!-- 4 -->
+                <fuse-card [ngClass]="config.cardLayout==='card-4' ? 'selected-card':'gray-border'"
+                    class="flex positionButton flex-col mt-1 lg:flex-row sm:flex-row md:flex-row lg:max-w-240 filter-pricing relative">
+                    <div class="overlay"></div>
+                    <div class="buttonOnCard">
+                        <button (click)="setCardLayout('card-4')" mat-flat-button [color]="'primary'">
+                            Add This Layout
+                        </button>
+                    </div>
+                    <div class="p-4 sm:p-4 lg:p-4">
+                        <mat-checkbox class="absolute  right-0 mr-1" style="top: 14px;" [color]="'primary'"
+                            (click)="$event.stopPropagation()">
+                        </mat-checkbox>
+                        <div class="text-xl font-bold">Lifetime Membership</div>
+                        <div class="mt-2 leading-relaxed text-secondary line-clamp--A">
+                            Learn from like-minded individuals which are eager to make a living building stuff on the
+                            web.
+                            Pay once and get lifetime access to the community.
+                        </div>
+                        <div class="flex items-center mt-1">
+                            <div class="font-medium text-secondary">Custom Fields </div>
+                            <div class="flex-auto ml-2 border-b-2"></div>
+                        </div>
+                        <!-- Features -->
+                        <div class="grid grid-cols-3 gap-2 mt-2">
+
+                            <div>
+                                <div class="font-semibold">
+                                    Color
+                                </div>
+                                <div class="text-secondary text-md">
+                                    Black
+                                </div>
+                            </div>
+
+                            <div>
+                                <div class="font-semibold">
+                                    Product type
+                                </div>
+                                <div class="text-secondary text-md">
+                                    Cloth
+                                </div>
+                            </div>
+
+                            <div>
+                                <div class="font-semibold">
+                                    Dimenssion
+                                </div>
+                                <div class="text-secondary text-md">
+                                    N/A
+                                </div>
+                            </div>
+                            <div>
+                                <div class="font-semibold">
+                                    Location
+                                </div>
+                                <div class="text-secondary text-md">
+                                    N/A
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Price -->
+                    <div
+                        class="flex flex-col items-center p-4 lg:px-4 lg:py-4 lg:min-w-60 bg-gray-100 dark:bg-black dark:bg-opacity-10">
+                        <div class="flex items-center whitespace-nowrap">
+                            <div class="text-8xl font-extrabold tracking-tight">$599</div>
+                        </div>
+                        <div class="font-medium text-center text-secondary">
+                            <div>Standard Cost</div>
+                        </div>
+                        <div class="w-full mt-8 grid grid-cols-3 gap-2">
+                            <button mat-button [color]="'primary'">
+                                <mat-icon class="icon-size-4 mr-1" [svgIcon]="'heroicons_solid:pencil-alt'"></mat-icon>
+                                Edit
+                            </button>
+                            <button mat-button class="text-amber-500">
+                                <mat-icon class="icon-size-4 mr-1 text-amber-500" [svgIcon]="'heroicons_solid:clock'">
+                                </mat-icon>
+                                History
+                            </button>
+                            <button mat-button class="text-red-500">
+                                <mat-icon class="icon-size-4 mr-1 text-red-500" [svgIcon]="'heroicons_solid:trash'">
+                                </mat-icon>
+                                Delete
+                            </button>
+                        </div>
+                    </div>
+                </fuse-card>
+                <!-- 5 -->
+                <fuse-card [ngClass]="config.cardLayout==='card-5' ? 'selected-card':'gray-border'"
+                    class="flex container flex-col GridCard positionButton mt-5 md:flex-row md:max-w-240 w-full filter-listing light">
+
+                    <div class="overlay"></div>
+                    <div class="buttonOnCard">
+                        <button (click)="setCardLayout('card-5')" mat-flat-button [color]="'primary'">
+                            Add This Layout
+                        </button>
+                    </div>
+                    <div class="flex flex-col flex-auto ml-5 mt-4 mb-4">
+
+                        <div class="text-lg font-semibold leading-tight">Centrino Men's 7957 Formal
+                        </div>
+                        <button class="absolute right-0 mr-5" style="top: 5px;" mat-icon-button
+                            [matMenuTriggerFor]="listCard01Menu">
+                            <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:dots-vertical'">
+                            </mat-icon>
+                        </button>
+                        <div class="mt-2 w-100 text-sm ">
+                            Allow your pair of shoes to air and de-odorize at regular basis; using a shoe-horn to wear
+                            your shoes.
+                        </div>
+                        <div class=" mt-3">
+                            <div class="grid grid-cols-5  gap-3">
+                                <div>
+                                    <div class="font-semibold">
+                                        Column
+                                    </div>
+                                    <div class="text-secondary text-md">
+                                        Data
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="font-semibold">
+                                        Color
+                                    </div>
+                                    <div class="text-secondary text-md">
+                                        Black
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="font-semibold">
+                                        Size
+                                    </div>
+                                    <div class="text-secondary text-md">
+                                        xl
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="font-semibold">
+                                        Product type
+                                    </div>
+                                    <div class="text-secondary text-md">
+                                        Cloth
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="font-semibold">
+                                        Brand
+                                    </div>
+                                    <div class="text-secondary text-md">
+                                        H&M
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="font-semibold">
+                                        Standard Cost
+                                    </div>
+                                    <div class="text-secondary text-md">
+                                        499$
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="font-semibold">
+                                        List Price
+                                    </div>
+                                    <div class="text-secondary text-md">
+                                        500$
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="font-semibold">
+                                        Weight
+                                    </div>
+                                    <div class="text-secondary text-md">
+                                        5
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="font-semibold">
+                                        Dimenssion
+                                    </div>
+                                    <div class="text-secondary text-md">
+                                        N/A
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="font-semibold">
+                                        Location
+                                    </div>
+                                    <div class="text-secondary text-md">
+                                        N/A
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </fuse-card>
+                <!-- 2 -->
+                <div [ngClass]="config.cardLayout==='card-2' ? 'selected-card':'gray-border'"
+                    class="flex container cardHeight flex-col sm:flex-row mt-5 positionButton justify-between md:max-w-240 w-full p-4 pb-2 light filter-listing">
+                    <div class=" w-full sm:max-w-40 mb-8 md:mb-4 rounded-lg overflow-hidden">
+                        <img class="w-full object-cover imgHover"
+                            src="https://images.unsplash.com/photo-1618517351616-38fb9c5210c6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8bWFuJTIwdCUyMHNoaXJ0fGVufDB8fDB8fHww&w=1000&q=80"
+                            alt="Card cover image">
+                    </div>
+                    <div class="overlay"></div>
+                    <div class="buttonOverlay">
+                        <button (click)="setCardLayout('card-2')" mat-flat-button [color]="'primary'">
+                            Add This Layout
+                        </button>
+                    </div>
+                    <div class="flex flex-col ml-6 flex-auto">
+                        <div class="text-md font-semibold leading-tight">Puzzles Coffee Shop</div>
+                        <div class="absolute right-0 mr-2" style="top: 0px;">
+                            <button mat-icon-button [color]="'primary'" (click)="editProduct.emit(item)">
+                                <mat-icon class="icon-size-4 " [svgIcon]="'heroicons_solid:pencil-alt'"></mat-icon>
+                            </button>
+                            <button mat-icon-button class="text-amber-500" (click)="gotoHistory.emit(item)">
+                                <mat-icon class="icon-size-4 text-amber-500" [svgIcon]="'heroicons_solid:clock'">
+                                </mat-icon>
+                            </button>
+                            <button mat-icon-button class="text-red-500" (click)="ConfirmDelete.emit(item)">
+                                <mat-icon class="icon-size-4  text-red-500" [svgIcon]="'heroicons_solid:trash'">
+                                </mat-icon>
+                            </button>
+                        </div>
+                        <div class="mt-2">
+                            <div class="flex flex-wrap items-center text-sm text-secondary my-1">
+                                <span class="whitespace-nowrap">Arabian, Brazilian, Colombian</span>
+                            </div>
+                            <div class="flex items-center text-sm text-secondary my-1">
+                                <span>774 Riverview St. Lorem ipsum dolor sit, amet consectetur </span>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-4 gap-4 mt-2">
+                            <div>
+                                <div class="font-semibold">
+                                    Location
+                                </div>
+                                <div class="text-secondary text-md">
+                                    Block-A
+                                </div>
+                            </div>
+                            <div>
+                                <div class="font-semibold">
+                                    Color
+                                </div>
+                                <div class="text-secondary text-md">
+                                    Blue
+                                </div>
+                            </div>
+                            <div>
+                                <div class="font-semibold">
+                                    Brand
+                                </div>
+                                <div class="text-secondary text-md">
+                                    Gucci
+                                </div>
+                            </div>
+                            <div>
+                                <div>
+                                    <div class="text-secondary">
+                                        List Price
+                                    </div>
+                                    <div class="font-semibold text-md">
+                                        $0
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="absolute right-0 mr-2" style="top: 84px;">
+                            <button mat-icon-button [color]="'primary'" [matTooltip]="'Show More Fields'">
+                                <mat-icon svgIcon="heroicons_solid:arrow-right" class="icon-size-4 text-blue-500">
+                                </mat-icon>
+                            </button>
+                        </div>
+
+
+                    </div>
+
+                </div>
+                <!-- 3 -->
+                <div [ngClass]="config.cardLayout==='card-3' ? 'selected-card':'gray-border'"
+                    class="flex mt-5 container flex-col sm:flex-row positionButton cardHeight justify-between md:max-w-240 w-full p-4 pb-2 light filter-listing ">
+                    <div class="flex flex-col flex-auto ">
+                        <div class="text-md font-semibold mt-2 leading-tight">Product Name</div>
+                        <mat-checkbox class="absolute  right-0 mr-1" style="top: 14px;" [color]="'primary'"
+                            (click)="$event.stopPropagation()" (change)="saveSelectedList.emit({$event, item})">
+                        </mat-checkbox>
+                        <div class="mt-1">
+                            <div class="flex flex-wrap items-center w-100 text-sm text-secondary">
+                                <span class="line-clamp--A">Product description. You can put your product
+                                    description here.</span>
+                            </div>
+                        </div>
+                        <div class="overlay"></div>
+                        <div class="buttonOverlay">
+                            <button (click)="setCardLayout('card-3')" mat-flat-button [color]="'primary'">
+                                Add This Layout
+                            </button>
+                        </div>
+                        <div class="relative">
+                            <div class="grid grid-cols-3 gap-4 mt-2">
+                                <div>
+                                    <div class="font-semibold">
+                                        Location
+                                    </div>
+                                    <div class="text-secondary text-md">
+                                        Block-A
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="font-semibold">
+                                        Color
+                                    </div>
+                                    <div class="text-secondary text-md">
+                                        Blue
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="font-semibold">
+                                        Brand
+                                    </div>
+                                    <div class="text-secondary text-md">
+                                        Gucci
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="absolute right-0" style="top: 4px;">
+                                <button mat-icon-button [matTooltip]="'Show More Fields'" [color]="'primary'">
+                                    <mat-icon class="icon-size-5 text-blue-500"
+                                        [svgIcon]="'heroicons_outline:arrow-narrow-right'"></mat-icon>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="flex items-center -mx-3">
+                            <button class=" text-sm mr-1 text-primary-600" mat-button [routerLink]="['./']">
+                                Edit
+                            </button>
+                            <button class=" text-sm text-amber-600" mat-button [routerLink]="['./']">
+                                History
+                            </button>
+                            <button class="text-sm text-red-500" mat-button [routerLink]="['./']">
+                                Delete
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="order-1 md:order-2 w-full md:max-w-40 ml-6 mb-2 md:mb-4 rounded-lg overflow-hidden">
+                        <img class="w-full object-cover imgHover"
+                            src="https://images.unsplash.com/photo-1618517351616-38fb9c5210c6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8bWFuJTIwdCUyMHNoaXJ0fGVufDB8fDB8fHww&w=1000&q=80"
+                            alt="Card cover image">
+                    </div>
+
+                </div>
+
+
+
+
+
+            </ng-container>
+
+        </div>
+    </div>
+</fuse-drawer>

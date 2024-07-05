@@ -1,0 +1,97 @@
+<div class="flex flex-col bg-card sm:flex-row items-center md:items-start sm:justify-center md:justify-start flex-auto min-w-0">
+    <div class="md:flex md:items-center  w-full max-w-160">
+        <div class="w-full  mx-auto sm:mx-0">
+            <div class="p-5 w-full">
+
+                <h1 class="text-4xl">TAG SAMPLE(s)</h1>
+
+                <div class="light mt-2">
+                    <div class="p-5">
+                        <h1>Example 1</h1>
+                        <div class="flex w-full mt-3">
+                            <mat-form-field class="fuse-mat-textarea w-full">
+                              
+                                <mat-icon matPrefix class="hidden sm:flex icon-size-5"
+                                    [svgIcon]="'heroicons_solid:location-marker'"></mat-icon>
+                                <mat-chip-list #chipList>
+        
+                                    <mat-chip name="tag" *ngFor="let tag of tags" (removed)="remove(tag)">
+                                        {{tag}}
+                                        <button matChipRemove>
+                                            <mat-icon>cancel</mat-icon>
+                                        </button>
+                                    </mat-chip>
+        
+                                    <input [placeholder]="'New Tag... press to comma or enter to spreate'" #tagInput matInput
+                                        [matChipInputFor]="chipList" [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                                        (matChipInputTokenEnd)="add($event)" (blur)="addOnBlur($event)">
+                                </mat-chip-list>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="light mt-4">
+                    <div class="p-5">
+                        <h1 class="mb-2">Example 2</h1>
+
+                        <ng-container
+                        *ngFor="let item of tagList; let i = index">
+                        <div  class="flex w-full mb-2">
+                            <mat-form-field class="fuse-mat-no-subscript w-full">
+                                <!-- <mat-label *ngIf="first">Key</mat-label> -->
+                                <mat-icon matPrefix class="hidden sm:flex icon-size-5"
+                                    [svgIcon]="'heroicons_outline:key'">
+                                </mat-icon>
+                                <input matInput [(ngModel)]="item.key" [placeholder]="'Key'"
+                                    [spellcheck]="false">
+                            </mat-form-field>
+                            <mat-form-field
+                                class="fuse-mat-no-subscript w-full ml-2 sm:ml-4">
+                                <!-- <mat-label *ngIf="first">Value</mat-label> -->
+                                <mat-icon matPrefix class="hidden sm:flex icon-size-5"
+                                    [svgIcon]="'heroicons_outline:tag'">
+                                </mat-icon>
+                                <input matInput [(ngModel)]="item.value"
+                                    [placeholder]="'Value'">
+                            </mat-form-field>
+                            <!-- Remove email -->
+                            <ng-container>
+                                <div class="flex items-center w-10 pl-2">
+                                    <button (click)="removeTags(i)" class="w-8 h-8 min-h-8" mat-icon-button
+                                         matTooltip="Remove">
+                                        <mat-icon class="icon-size-5 text-red-600"
+                                            [svgIcon]="'heroicons_solid:trash'">
+                                        </mat-icon>
+                                    </button>
+                                </div>
+                            </ng-container>
+                        </div>
+                    </ng-container>
+
+                    <div class="flex mb-2">
+                        <div class="group inline-flex items-center mt-2 -ml-4 py-2 px-4 rounded cursor-pointer"
+                            (click)="addTag()">
+                            <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:plus-circle'">
+                            </mat-icon>
+                            <span class="ml-2 font-medium text-secondary group-hover:underline">Add
+                                a tag</span>
+
+                        </div>
+
+                    </div>
+                    </div>
+                </div>
+
+              
+
+
+
+            
+            </div>
+         
+        </div>
+    </div>
+   
+</div>

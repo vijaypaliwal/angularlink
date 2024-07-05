@@ -1,0 +1,199 @@
+<!-- Bar search -->
+
+
+
+<ng-container *ngIf="appearance === 'bar'">
+    <button mat-icon-button *ngIf="!opened" (click)="open()">
+        <mat-icon [svgIcon]="'heroicons_outline:search'"></mat-icon>
+    </button>
+    <div class="absolute inset-0 flex items-center shrink-0 z-99 bg-card" *ngIf="opened" @slideInTop @slideOutTop>
+        <mat-icon class="absolute ml-6 sm:ml-8" [svgIcon]="'heroicons_outline:search'">
+        </mat-icon>
+        <input class="w-full h-full px-16 sm:px-18" [formControl]="searchControl" [matAutocomplete]="matAutocomplete"
+            [placeholder]="'Search...'" (keydown)="onKeydown($event)" #barSearchInput>
+        <mat-autocomplete class="max-h-160 sm:px-2 border-t rounded-b shadow-md" [autoSelectActiveOption]="true"
+            [disableRipple]="true" #matAutocomplete="matAutocomplete">
+            <mat-option class="py-0 px-6 text-md pointer-events-none text-secondary bg-transparent"
+                *ngIf="resultSets && !resultSets.length">
+                No results found!
+            </mat-option>
+            <ng-container *ngFor="let resultSet of resultSets; trackBy: trackByFn">
+                <mat-optgroup class="flex items-center mt-2 px-2">
+                    <span class="text-sm font-semibold tracking-wider text-secondary">{{resultSet.label.toUpperCase()}}
+                        [{{resultSet.results.length}}]
+                    </span>
+                </mat-optgroup>
+                <ng-container *ngFor="let result of resultSet.results; trackBy: trackByFn">
+                    <mat-option
+                        class="group relative mb-1 py-0 px-6 text-md rounded-md hover:bg-gray-100 dark:hover:bg-hover"
+                        (onSelectionChange)="onSelFunc(result)" [value]="result.value">
+                        <!-- Contacts -->
+                        <ng-container *ngIf="resultSet.id === 'products'">
+                            <ng-container *ngTemplateOutlet="productResult; context: {$implicit: result}">
+                            </ng-container>
+                        </ng-container>
+                        <!-- Pages -->
+                        <ng-container *ngIf="resultSet.id === 'pages'">
+                            <ng-container *ngTemplateOutlet="pageResult; context: {$implicit: result}"></ng-container>
+                        </ng-container>
+                        <!-- Tasks -->
+                        <ng-container *ngIf="resultSet.id === 'locations'">
+                            <ng-container *ngTemplateOutlet="taskResult; context: {$implicit: result}"></ng-container>
+                        </ng-container>
+                        <ng-container *ngIf="resultSet.id === 'productTypes'">
+                            <ng-container
+                                *ngTemplateOutlet="productTypesResult; context: {$implicit: result}"></ng-container>
+                        </ng-container>
+                    </mat-option>
+                </ng-container>
+            </ng-container>
+        </mat-autocomplete>
+        <button class="absolute top-1/2 right-5 sm:right-7 shrink-0 w-10 h-10 -mt-5" mat-icon-button (click)="close()">
+            <mat-icon *ngIf="!isSearchStart" [svgIcon]="'heroicons_outline:x'"></mat-icon>
+            <mat-spinner class="mr-5 text-blue-600" *ngIf="isSearchStart" diameter="20"></mat-spinner>
+        </button>
+    </div>
+</ng-container>
+
+<!-- Basic search -->
+<ng-container *ngIf="appearance === 'basic'">
+    <div class="w-full sm:min-w-80">
+        <mat-form-field class="fuse-mat-no-subscript w-full">
+            <mat-icon matPrefix [svgIcon]="'heroicons_outline:search'"></mat-icon>
+            <input matInput [formControl]="searchControl" [matAutocomplete]="matAutocomplete"
+                [placeholder]="'Search...'" (keydown)="onKeydown($event)">
+        </mat-form-field>
+        <mat-autocomplete class="max-h-128 mt-1 rounded" [autoSelectActiveOption]="true" [disableRipple]="true"
+            #matAutocomplete="matAutocomplete">
+            <mat-option class="py-0 px-6 text-md pointer-events-none text-secondary bg-transparent"
+                *ngIf="resultSets && !resultSets.length">
+                No results found!
+            </mat-option>
+            <ng-container *ngFor="let resultSet of resultSets; trackBy: trackByFn">
+                <mat-optgroup class="flex items-center mt-2 px-2">
+                    <span
+                        class="text-sm font-semibold tracking-wider text-secondary">{{resultSet.label.toUpperCase()}}</span>
+                </mat-optgroup>
+                <ng-container *ngFor="let result of resultSet.results; trackBy: trackByFn">
+                    <mat-option
+                        class="group relative mb-1 py-0 px-6 text-md rounded-md hover:bg-gray-100 dark:hover:bg-hover"
+                        [routerLink]="result.link" [value]="result.value">
+                        <!-- Contacts -->
+                        <ng-container *ngIf="resultSet.id === 'contacts'">
+                            <ng-container *ngTemplateOutlet="productResult; context: {$implicit: result}">
+                            </ng-container>
+                        </ng-container>
+                        <!-- Pages -->
+                        <ng-container *ngIf="resultSet.id === 'pages'">
+                            <ng-container *ngTemplateOutlet="pageResult; context: {$implicit: result}"></ng-container>
+                        </ng-container>
+                        <!-- Tasks -->
+                        <ng-container *ngIf="resultSet.id === 'tasks'">
+                            <ng-container *ngTemplateOutlet="taskResult; context: {$implicit: result}"></ng-container>
+                        </ng-container>
+                    </mat-option>
+                </ng-container>
+            </ng-container>
+        </mat-autocomplete>
+    </div>
+</ng-container>
+
+<!-- Contact result template -->
+<ng-template #productResult let-result>
+
+    <a class="z-20 flex items-center cursor-pointer">
+        <div class="flex flex-0 items-center justify-center w-10 h-10 rounded-full overflow-hidden">
+            <ng-container *ngIf="result.images && result.images.length > 0">
+                <img class="object-cover w-full h-full bg-gray-200" [src]="result.images[0].src" alt="Contact avatar" />
+            </ng-container>
+            <ng-container *ngIf="!result.images">
+                <div
+                    class="flex items-center justify-center w-full h-full rounded-full text-lg uppercase bg-gray-200 text-gray-600 dark:bg-gray-700 dark:text-gray-200">
+                    <mat-icon class="m-0 icon-size-5 text-primary dark:text-primary-400"
+                        [svgIcon]="'heroicons_outline:shopping-cart'"></mat-icon>
+                </div>
+            </ng-container>
+        </div>
+        <div class="min-w-0 ml-4">
+            <div class="font-medium leading-5 text-primary-500 truncate">{{result.title}}</div>
+            <div class="leading-5 truncate text-secondary">{{result.sku}}</div>
+        </div>
+    </a>
+</ng-template>
+
+<!-- Page result template -->
+<ng-template #pageResult let-result>
+
+    <a class="z-20 flex items-center cursor-pointer">
+        <div class="flex flex-0 items-center justify-center w-10 h-10 rounded-full overflow-hidden">
+
+            <ng-container>
+                <div
+                    class="flex items-center justify-center w-full h-full rounded-full text-lg uppercase bg-gray-200 text-gray-600 dark:bg-gray-700 dark:text-gray-200">
+                    <mat-icon class="m-0 icon-size-5 text-primary dark:text-primary-400"
+                        [svgIcon]="'heroicons_outline:clipboard-list'"></mat-icon>
+                </div>
+            </ng-container>
+        </div>
+        <div class="min-w-0 ml-4">
+            <div class="font-medium text-primary-500 leading-5 truncate"> {{result.link}}</div>
+            <div class="leading-5 truncate text-secondary">/Products/Pages</div>
+        </div>
+    </a>
+
+
+</ng-template>
+
+<!-- Task result template -->
+<ng-template #taskResult let-result>
+    <a class="z-20 flex items-center cursor-pointer">
+        <div class="flex flex-0 items-center justify-center w-10 h-10 rounded-full overflow-hidden">
+
+            <ng-container>
+                <div
+                    class="flex items-center justify-center w-full h-full rounded-full text-lg uppercase bg-gray-200 text-gray-600 dark:bg-gray-700 dark:text-gray-200">
+                    <mat-icon class="m-0 icon-size-5 text-primary dark:text-primary-400"
+                        [svgIcon]="'heroicons_outline:location-marker'"></mat-icon>
+                </div>
+            </ng-container>
+        </div>
+        <div class="min-w-0 ml-4">
+            <div class="font-medium text-primary-500 leading-5 truncate uppercase"> {{result.name}}</div>
+            <div *ngIf="result.tagsarray" class="leading-5 truncate text-secondary"> <span
+                    style="border-radius:15px; font-size: 11px;" class="p-2 mr-2 border-radius-full mt-1 bg-gray-200"
+                    *ngFor="let item of result.tagsarray">
+                    {{item}}
+                </span>
+            </div>
+
+        </div>
+    </a>
+</ng-template>
+
+<!-- Task result template -->
+
+<ng-template #productTypesResult let-result>
+    <a class="z-20 flex items-center cursor-pointer">
+        <div class="flex flex-0 items-center justify-center w-10 h-10 rounded-full overflow-hidden">
+
+            <ng-container>
+                <div
+                    class="flex items-center justify-center w-full h-full rounded-full text-lg uppercase bg-gray-200 text-gray-600 dark:bg-gray-700 dark:text-gray-200">
+                    <mat-icon class="m-0 icon-size-5 text-primary dark:text-primary-400"
+                        [svgIcon]="'heroicons_outline:template'"></mat-icon>
+                </div>
+            </ng-container>
+        </div>
+        <div class="min-w-0 ml-4">
+            <div class="font-medium text-primary-500 leading-5 truncate uppercase"> {{result.TypeName}}</div>
+            <div *ngIf="result.tagsarray" class="leading-5 truncate text-secondary"> <span
+                    style="border-radius:15px; font-size: 11px;" class="p-2 mr-2 border-radius-full mt-1 bg-gray-200"
+                    *ngFor="let item of result.tagsarray">
+                    {{item}}
+                </span>
+            </div>
+
+        </div>
+    </a>
+
+</ng-template>

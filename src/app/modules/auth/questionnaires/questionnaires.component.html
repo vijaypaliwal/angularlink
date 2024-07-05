@@ -1,0 +1,831 @@
+<div class="flex flex-col w-full min-w-0 sm:absolute sm:inset-0 sm:overflow-auto">
+    <mat-drawer-container>
+        <mat-drawer-content>
+            <ng-container>
+                <div class="grid lg:grid-cols-4 grid-cols-1 h-full">
+                    <div class="col-span-1" *ngIf="!isScreenSmall">
+
+                        <div class="steps-area steps-area-fixed">
+                            <div class="image-holder">
+                                <img src="../../../../assets/images/Stepper_image.JPG" alt="">
+                            </div>
+                            <div class="steps clearfix">
+                                <ul class="tablist multisteps-form__progress">
+                                    <li class="multisteps-form__progress-btn js-active "
+                                        [ngClass]="currentStep==1?'current':''">
+                                        <span>1</span>
+                                    </li>
+                                    <li class="multisteps-form__progress-btn" [ngClass]="{'current':currentStep==2,
+                        'js-active':currentStep==2||currentStep==3||currentStep==4||currentStep==5
+                        }">
+                                        <span>2</span>
+                                    </li>
+                                    <li class="multisteps-form__progress-btn" [ngClass]="{'current':currentStep==3,
+                        'js-active':currentStep==3||currentStep==4||currentStep==5
+                        }">
+                                        <span>3</span>
+                                    </li>
+                                    <li class="multisteps-form__progress-btn" [ngClass]="{'current':currentStep==4,
+                        'js-active':currentStep==4||currentStep==5
+                        }">
+                                        <span>4</span>
+                                    </li>
+                                    <li class="multisteps-form__progress-btn last" [ngClass]="{'current':currentStep==5,
+                        'js-active':currentStep==5
+                        }">
+                                        <span>5</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="lg:col-span-3">
+
+                        <div class="containerZ pt-20">
+                            <div class="flex justify-between" *ngIf="!isScreenSmall">
+                                <div class="border-b-4 border-primary-400">
+                                    <span *ngIf="step1" class="text-3xl font-semibold">Step 1</span>
+                                    <span *ngIf="step2" class="text-3xl font-semibold">Step 2</span>
+                                    <span *ngIf="step3" class="text-3xl font-semibold">Step 3</span>
+                                    <span *ngIf="step4" class="text-3xl font-semibold">Step 4</span>
+                                    <span *ngIf="step5" class="text-3xl font-semibold">Step 5</span>
+                                </div>
+                                <div>
+                                    <div><span class="text-1xl font-semibold">{{currentStep - 1}} Of 5 Completed</span>
+                                    </div>
+                                    <mat-progress-bar class="w-128 h-3" mode="determinate" [value]="progressValue">
+                                    </mat-progress-bar>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-1 gap-3" *ngIf="isScreenSmall">
+                                <div class="border-b-4 w-20 border-primary-400">
+                                    <span *ngIf="step1" class="text-3xl font-semibold">Step 1</span>
+                                    <span *ngIf="step2" class="text-3xl font-semibold">Step 2</span>
+                                    <span *ngIf="step3" class="text-3xl font-semibold">Step 3</span>
+                                    <span *ngIf="step4" class="text-3xl font-semibold">Step 4</span>
+                                    <span *ngIf="step5" class="text-3xl font-semibold">Step 5</span>
+                                </div>
+                                <div>
+                                    <div><span class="text-1xl font-semibold">{{currentStep - 1}} Of 5 Completed</span>
+                                    </div>
+                                    <mat-progress-bar class="w-full h-3" mode="determinate" [value]="progressValue">
+                                    </mat-progress-bar>
+                                </div>
+                            </div>
+                            <ng-container *ngIf="step1">
+                                <form [formGroup]="questionnairesForm.get('step1')">
+                                    <div class="pt-15">
+                                        <span class="text-7xl font-bold">
+                                            What is your Organization Name?
+                                        </span>
+                                    </div>
+                                    <div class="mt-5">
+                                        <span class="font-semibold text-secondary text-2xl">
+                                            If you have a specific organization in mind and would like information about
+                                            it,
+                                            please provide the name of the
+                                            organization
+                                        </span>
+                                    </div>
+                                    <div class="pt-10">
+                                        <div class="form-group mt-5 mb-5">
+                                            <div>
+                                                <h4 class="font-medium text-semibold text-lg mb-4">
+                                                    <strong>Organization Logo</strong>
+                                                </h4>
+                                                <div class="flex">
+                                                    <div style="display:none" class="form-group">
+                                                        <label for="file">File</label>
+                                                        <input #fileInput formControlName="Value" id="file" type="file"
+                                                            class="form-control" accept=".png,.jpg,.jpeg"
+                                                            (change)="onFileChange(fileInput.files)">
+                                                    </div>
+                                                    <div [ngClass]="questionnairesForm.get('step1.organizationLogo').value?'':'p-5'"
+                                                        class="maxHeight min-w-40 cursor-pointer outline-dashed outline-2 outline-offset-2 outline-indigo-600 hover:outline-indigo-400 rounded-xl">
+
+                                                        <ng-container
+                                                            *ngIf="!questionnairesForm.get('step1.organizationLogo').value">
+                                                            <div (drop)="onFileDrop($event)"
+                                                                (dragover)="onDragOver($event)"
+                                                                (click)="fileInput.click()">
+                                                                <div class="flex  justify-center text-sm mb-2">
+                                                                    <mat-icon matPrefix style="color: #06f;"
+                                                                        class="sm:flex icon-size-8"
+                                                                        [svgIcon]="'heroicons_outline:photograph'">
+                                                                    </mat-icon>
+
+
+                                                                </div>
+
+                                                                <div class="flex justify-center sm:w-60 text-sm">
+                                                                    Upload Your Organization Logo
+                                                                </div>
+                                                            </div>
+                                                        </ng-container>
+                                                        <ng-container
+                                                            *ngIf="questionnairesForm.get('step1.organizationLogo').value">
+                                                            <div class="RemoveBtn"><mat-icon matPrefix
+                                                                    (click)="removeImage()"
+                                                                    class="icon-size-5 text-red-800"
+                                                                    [svgIcon]="'heroicons_outline:trash'">
+                                                                </mat-icon></div>
+                                                            <img (drop)="onFileDrop($event)"
+                                                                (dragover)="onDragOver($event)"
+                                                                (click)="fileInput.click()"
+                                                                class="object-cover rounded-xl receipt-image"
+                                                                [src]="questionnairesForm.get('step1.organizationLogo').value">
+                                                        </ng-container>
+                                                    </div>
+
+                                                    <div class="flex-1  pl-6">
+                                                        <label>An organization logo is a
+                                                            visual representation that serves as a unique and
+                                                            distinctive symbol for <br> a particular
+                                                            organization.
+                                                        </label>
+                                                        <p class="font-xs text-muted w-85">Preferred Image
+                                                            Dimensions:
+                                                            240 x 240 pixels<br><strong>Maximum File
+                                                                Size: 1MB</strong></p>
+
+                                                        <!-- <button
+                                                            *ngIf="questionnairesForm.get('step1.organizationLogo').value"
+                                                            (click)="removeImage()" mat-flat-button
+                                                            class="text-red-500 mt-2">
+                                                             Remove
+                                                        </button> -->
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <mat-form-field class="w-full">
+                                            <!-- <mat-label class="text-xl">Organization Name</mat-label> -->
+                                            <input class="h-10" matInput formControlName="organizationName" required
+                                                placeholder="Organization Name" autofocus>
+                                            <mat-error
+                                                *ngIf="questionnairesForm.get('step1.organizationName').hasError('required')">
+                                                Organization Name is
+                                                required
+                                            </mat-error>
+                                        </mat-form-field>
+                                        <div class="flex justify-end mt-5">
+                                            <button class="fuse-mat-button-large" [color]="'primary'"
+                                                [matTooltip]="'Go To Step 2'" mat-flat-button
+                                                [disabled]="questionnairesForm.get('step1').invalid"
+                                                (click)="goToStep2()">
+                                                <span class="text-2xl mr-2">Next</span>
+                                                <mat-icon class="icon-size-7" [svgIcon]="'heroicons_solid:arrow-right'">
+                                                </mat-icon>
+                                            </button>
+                                        </div>
+
+                                    </div>
+                                </form>
+                            </ng-container>
+                            <ng-container *ngIf="step2">
+                                <form [formGroup]="questionnairesForm.get('step2')">
+                                    <div class="pt-15">
+                                        <span class="text-7xl font-bold">
+                                            Personal Details
+                                        </span>
+                                    </div>
+                                    <div class="mt-5">
+                                        <span class="font-semibold text-secondary text-2xl">
+                                            Personal details or data is information that is personal to you, which could
+                                            or
+                                            does identify you.
+                                        </span>
+                                    </div>
+                                    <div class="pt-10">
+                                        <div class="form-group mt-5 mb-5">
+                                            <div>
+                                                <h4 class="font-medium text-semibold text-lg mb-4">
+                                                    <strong>Profile Logo</strong>
+                                                </h4>
+                                                <div class="flex">
+                                                    <div style="display:none" class="form-group">
+                                                        <label for="file">File</label>
+                                                        <input #fileInputProfile formControlName="Value" id="file2"
+                                                            type="file" class="form-control" accept=".png,.jpg,.jpeg"
+                                                            (change)="onFileChangeProfile(fileInputProfile.files)">
+                                                    </div>
+                                                    <div [ngClass]="questionnairesForm.get('step2.avatar').value?'':'p-5'"
+                                                        class="maxHeight min-w-40 cursor-pointer outline-dashed outline-2 outline-offset-2 outline-indigo-600 hover:outline-indigo-400 rounded-xl">
+                                                        <ng-container
+                                                            *ngIf="!questionnairesForm.get('step2.avatar').value">
+                                                            <div (drop)="onFileDropProfile($event)"
+                                                                (dragover)="onDragOver($event)"
+                                                                (click)="fileInputProfile.click()">
+                                                                <div class="flex  justify-center text-sm mb-2">
+                                                                    <mat-icon matPrefix style="color: #06f;"
+                                                                        class="sm:flex icon-size-8"
+                                                                        [svgIcon]="'heroicons_outline:photograph'">
+                                                                    </mat-icon>
+
+
+                                                                </div>
+
+                                                                <div class="flex justify-center w-60 text-sm">
+                                                                    Upload Your Profile Logo
+                                                                </div>
+                                                            </div>
+                                                        </ng-container>
+                                                        <ng-container
+                                                            *ngIf="questionnairesForm.get('step2.avatar').value">
+                                                            <div class="RemoveBtn"><mat-icon matPrefix
+                                                                    (click)="removeImageProfile()"
+                                                                    class="icon-size-5 text-red-800"
+                                                                    [svgIcon]="'heroicons_outline:trash'">
+                                                                </mat-icon></div>
+                                                            <img (drop)="onFileDropProfile($event)"
+                                                                (dragover)="onDragOver($event)"
+                                                                (click)="fileInputProfile.click()"
+                                                                class="object-cover rounded-xl receipt-image"
+                                                                [src]="questionnairesForm.get('step2.avatar').value">
+                                                        </ng-container>
+
+                                                    </div>
+
+                                                    <div class="flex-1  pl-6 mt-2"><label>A profile logo, often referred
+                                                            to as a user or personal avatar.</label>
+                                                        <p class="font-xs text-muted w-85">Preferred Image
+                                                            Dimensions:
+                                                            240 x 240 pixels<br><strong>Maximum File
+                                                                Size: 1MB</strong></p>
+                                                        <!-- <button *ngIf="questionnairesForm.get('step2.avatar').value"
+                                                            (click)="removeImageProfile()" mat-flat-button
+                                                            class="text-red-500 mt-2">
+                                                            Remove
+                                                        </button> -->
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <mat-form-field class="w-full">
+                                            <input class="h-10" matInput formControlName="firstName" required
+                                                placeholder="First Name" autofocus>
+                                            <mat-error
+                                                *ngIf="questionnairesForm.get('step2.firstName').hasError('required')">
+                                                The
+                                                First Name
+                                                is
+                                                required
+                                            </mat-error>
+                                        </mat-form-field>
+                                        <mat-form-field class="w-full">
+                                            <input class="h-10" matInput formControlName="lastName" required
+                                                placeholder="Last Name" autofocus>
+                                            <mat-error
+                                                *ngIf="questionnairesForm.get('step2.lastName').hasError('required')">
+                                                The
+                                                Last Name
+                                                is
+                                                required
+                                            </mat-error>
+                                        </mat-form-field>
+
+                                        <mat-form-field class="w-full">
+                                            <input class="h-10" matInput formControlName="phoneNumber"
+                                                placeholder="Mobile Number" autofocus>
+
+                                            <mat-error
+                                                *ngIf="questionnairesForm.get('step2.phoneNumber').hasError('pattern')">
+                                                Invalid mobile number</mat-error>
+                                        </mat-form-field>
+
+                                        <div class="flex justify-end mt-5">
+                                            <button class="fuse-mat-button-large" [color]="'secondary'"
+                                                [matTooltip]="'Back To Step 1'" mat-flat-button (click)="backToStep1()">
+                                                <mat-icon class="icon-size-7" [svgIcon]="'heroicons_solid:arrow-left'">
+                                                </mat-icon>
+                                                <span class="text-2xl ml-2">Back</span>
+                                            </button>
+                                            <button class="fuse-mat-button-large ml-3" [color]="'primary'"
+                                                [matTooltip]="'Go To Step 3'" mat-flat-button
+                                                [disabled]="questionnairesForm.get('step2').invalid"
+                                                (click)="goToStep3()">
+                                                <span class="text-2xl mr-2">Next</span>
+                                                <mat-icon class="icon-size-7" [svgIcon]="'heroicons_solid:arrow-right'">
+                                                </mat-icon>
+                                            </button>
+                                        </div>
+
+                                    </div>
+                                </form>
+                            </ng-container>
+                            <ng-container *ngIf="step3">
+                                <div class="pt-15">
+                                    <span class="text-7xl font-bold">
+                                        Inventory Settings
+                                    </span>
+                                </div>
+                                <div class="mt-5">
+                                    <span class="font-semibold text-secondary text-2xl">
+                                        Inventory settings refer to the configurable parameters and options within an
+                                        inventory management system that allow
+                                        users to customize how the system handles and tracks inventory-related
+                                        information.
+                                    </span>
+                                </div>
+
+
+                                <div class="pt-10">
+                                    <form [formGroup]="questionnairesForm.get('step3')">
+                                        <mat-form-field class="w-full">
+                                            <!-- <mat-label class="text-xl">Organization Name</mat-label> -->
+                                            <input class="h-10" matInput formControlName="inventoryName" required
+                                                placeholder="Enter Your Inventory Name" autofocus>
+                                            <mat-error
+                                                *ngIf="questionnairesForm.get('step3.inventoryName').hasError('required')">
+                                                Inventory Name is
+                                                required
+                                            </mat-error>
+                                        </mat-form-field>
+                                        <div class="py-2 flex justify-between">
+                                            <span class="text-2xl font-semibold">Select Your Inventory Type</span>
+                                            <!-- <button [color]="'secondary'" [matTooltip]="'Create Your Own Type'" mat-flat-button
+                                    (click)="createType()">
+                                    <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:plus'"></mat-icon>
+                                    <span class="text-2xl ml-2">Create</span>
+                                    </button> -->
+                                        </div>
+                                        <mat-radio-group [(ngModel)]="selectedOption"
+                                            [ngModelOptions]="{standalone: true}" (change)="onRadioChange()">
+                                            <div
+                                                class="grid gap-5 lg:grid-cols-4 md:grid-cols-4 sm:grid-cols-2 grid-cols-1">
+                                                <div class="bg-card rounded-lg p-3 border-3 cursor-pointer">
+                                                    <div class="flex justify-end mr-3">
+                                                        <mat-radio-button #radioOption1 [color]="'primary'"
+                                                            value="assetsTrack">
+                                                        </mat-radio-button>
+                                                    </div>
+                                                    <div class="flex justify-center">
+                                                        <div class="w-40">
+                                                            <img class="h-20 rounded-lg"
+                                                                src="../../../../assets/images/assets-track.jpg"
+                                                                alt="assets tracking">
+                                                        </div>
+                                                    </div>
+                                                    <div class="flex justify-center mt-3">
+                                                        <span class="font-bold text-xl">Assets Tracking</span>
+                                                    </div>
+                                                </div>
+                                                <div class="bg-card rounded-lg p-3 border-1">
+                                                    <div class="flex justify-end mr-3">
+                                                        <mat-radio-button #radioOption2 [color]="'primary'"
+                                                            value="manufaturing">
+                                                        </mat-radio-button>
+                                                    </div>
+                                                    <div class="flex justify-center">
+                                                        <div class="w-40">
+                                                            <img class="h-20 rounded-lg"
+                                                                src="../../../../assets/images/manufaturing.jpg"
+                                                                alt="assets tracking">
+                                                        </div>
+                                                    </div>
+                                                    <div class="flex justify-center mt-3">
+                                                        <span class="font-bold text-xl">Manufacturing</span>
+                                                    </div>
+                                                </div>
+                                                <div class="bg-card rounded-lg p-3 border-1">
+                                                    <div class="flex justify-end mr-3">
+                                                        <mat-radio-button #radioOption3 [color]="'primary'"
+                                                            value="stockMaintenance">
+                                                        </mat-radio-button>
+                                                    </div>
+                                                    <div class="flex justify-center">
+                                                        <div class="w-40">
+                                                            <img class="h-20 rounded-lg"
+                                                                src="../../../../assets/images/stock-maintenance.jpg"
+                                                                alt="assets tracking">
+                                                        </div>
+                                                    </div>
+                                                    <div class="flex justify-center mt-3">
+                                                        <span class="font-bold text-xl">Stock Maintenance</span>
+                                                    </div>
+                                                </div>
+                                                <div class="bg-card rounded-lg p-3 border-1">
+                                                    <div class="flex justify-end mr-3">
+                                                        <mat-radio-button #radioOption3 [color]="'primary'"
+                                                            value="none">
+                                                        </mat-radio-button>
+                                                    </div>
+                                                    <div class="flex justify-center">
+                                                        <div class="w-40">
+                                                            <img class="h-20 rounded-lg"
+                                                                src="../../../../assets/images/no_option.jpg"
+                                                                alt="assets tracking">
+                                                        </div>
+                                                    </div>
+                                                    <div class="flex justify-center mt-3">
+                                                        <span class="font-bold text-xl">None</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </mat-radio-group>
+                                        <div class="mt-5" *ngIf="isShowField">
+                                            <mat-form-field class="w-full">
+                                                <input class="h-10" matInput formControlName="inventoryType" required
+                                                    placeholder="Enter Your Inventory Type Name" autofocus>
+
+                                            </mat-form-field>
+                                        </div>
+
+                                        <div class="mt-5 bg-card rounded-lg">
+                                            <div class="px-3 py-4">
+                                                <div class="font-semibold text-xl">
+                                                    <mat-checkbox [(ngModel)]="isSelected"
+                                                        [ngModelOptions]="{standalone: true}" [color]="'primary'">
+                                                        Default Location
+                                                    </mat-checkbox>
+                                                </div>
+                                                <div class="text-lg">Inventory locations are the places where inventory
+                                                    is
+                                                    stored and distributed. You can configure the inventory location
+                                                    hierarchy with as many levels as are required
+                                                </div>
+                                            </div>
+                                            <div class="mt-3" *ngIf="isSelected">
+                                                <div class="px-3">
+                                                    <mat-form-field class="w-full">
+                                                        <mat-label>
+                                                            Location
+                                                        </mat-label>
+                                                        <mat-select [placeholder]="'Default Location'" multiple
+                                                            [formControlName]="'location'">
+                                                            <mat-option value="Warehouse">Warehouse
+                                                            </mat-option>
+                                                            <mat-option value="Block-A">Block-A
+                                                            </mat-option>
+                                                            <mat-option value="Front-Office">Front-Office
+                                                            </mat-option>
+                                                            <mat-option value="Cold Storage">Cold Storage
+                                                            </mat-option>
+                                                            <div (click)="addNewLocation()"
+                                                                class="text-primary px-5 py-3 cursor-pointer">
+                                                                Add
+                                                                Location
+                                                            </div>
+                                                        </mat-select>
+                                                        <mat-icon matPrefix svgIcon="heroicons_solid:view-list">
+                                                        </mat-icon>
+                                                    </mat-form-field>
+                                                    <ng-container *ngIf="isAddLocation">
+                                                        <mat-form-field class="w-full">
+                                                            <mat-label>Location Name</mat-label>
+                                                            <input matInput required placeholder="Location Name"
+                                                                autofocus>
+                                                            <mat-error>
+                                                                Location Name is
+                                                                required
+                                                            </mat-error>
+                                                        </mat-form-field>
+                                                    </ng-container>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="bg-card rounded-lg p-5 mt-7" *ngIf="showDrawer">
+                                            <div>
+                                                <div class="flex">
+                                                    <mat-icon class="mr-2 mt-1" matPrefix
+                                                        svgIcon="heroicons_solid:view-grid">
+                                                    </mat-icon>
+                                                    <span class="text-2xl font-semibold">Default Fields</span>
+                                                </div>
+                                                <div>
+                                                    <span class="text-lg">Fields are typically small, concise text areas
+                                                        used to
+                                                        provide brief information or labels in various contexts, such as
+                                                        forms, tables, or user interfaces.</span>
+                                                </div>
+                                            </div>
+                                            <div class="mt-5 text-xl font-bold">Attribute Fields</div>
+                                            <div class="grid lg:grid-cols-2 grid-cols-1 gap-3 mt-5">
+                                                <ng-container *ngFor="let field of questionnairesFields">
+                                                    <ng-container *ngIf="!field.IsActionField">
+                                                        <div class="bg-gray-200 p-3 rounded-lg">
+                                                            <div class="text-xl font-semibold Title-Line-Clamp">
+                                                                <mat-checkbox [(ngModel)]="field.IsSelected"
+                                                                    [ngModelOptions]="{standalone: true}"
+                                                                    [color]="'primary'">
+                                                                    {{field.Name}}
+                                                                </mat-checkbox>
+                                                            </div>
+                                                            <div class="text-lg Description-Line-Clamp">
+                                                                {{field.Description}}
+                                                            </div>
+                                                        </div>
+                                                    </ng-container>
+                                                </ng-container>
+                                            </div>
+                                            <div class="mt-5 text-xl font-bold">Action Fields</div>
+                                            <div class="grid lg:grid-cols-2 grid-cols-1 gap-3 mt-5">
+                                                <ng-container *ngFor="let field of questionnairesFields">
+                                                    <ng-container *ngIf="field.IsActionField">
+                                                        <div class="bg-gray-200 p-3 rounded-lg">
+                                                            <div class="text-xl font-semibold Title-Line-Clamp">
+                                                                <mat-checkbox [(ngModel)]="field.IsSelected"
+                                                                    [ngModelOptions]="{standalone: true}"
+                                                                    [color]="'primary'">
+                                                                    {{field.Name}}
+                                                                </mat-checkbox>
+                                                            </div>
+                                                            <div class="text-lg Description-Line-Clamp">
+                                                                {{field.Description}}
+                                                            </div>
+                                                        </div>
+                                                    </ng-container>
+                                                </ng-container>
+                                            </div>
+
+                                            <div class="mt-5" style="display:none">
+                                                <div>
+                                                    <div class="flex">
+                                                        <mat-icon class="mr-2 mt-1" matPrefix
+                                                            svgIcon="heroicons_solid:view-list">
+                                                        </mat-icon>
+                                                        <span class="text-2xl font-semibold">Selected Fields
+                                                            Table</span>
+                                                    </div>
+                                                    <div>
+                                                        <span class="text-lg">Table Description</span>
+                                                    </div>
+                                                </div>
+                                                <div class="mt-5">
+                                                    <div class="borderTable">
+                                                        <div class="flex inventory-grid z-10 sticky w-full  top-0 flex flex-row gap-4 py-4 px-6 md:px-8 shadow text-md font-semibold text-secondary bg-gray-50 dark:bg-black dark:bg-opacity-5"
+                                                            matSort matSortDisableClear>
+                                                            <ng-container *ngFor="">
+                                                                <div class="min-w-40 max-w-80">
+                                                                    Name
+                                                                </div>
+                                                            </ng-container>
+                                                            <!-- <div class=" min-w-40 w-80">
+                                                            Description
+                                                        </div>
+                                                        <div class=" min-w-40 w-full">
+                                                            Selected Fields
+                                                        </div> -->
+                                                        </div>
+                                                        <!-- Rows -->
+                                                        <div style="height: calc(100vh - 275px); overflow: auto;">
+                                                            <ng-container>
+                                                                <ng-container>
+                                                                    <ng-container>
+                                                                        <div
+                                                                            class="inventory-grid items-center flex flex-row gap-4 py-3 px-6 md:px-8 border-b overflow-y-auto">
+                                                                            <div
+                                                                                class="hidden truncate sm:block  min-w-40 max-w-80">
+                                                                                Fields Name
+                                                                            </div>
+                                                                            <!-- Name -->
+                                                                            <div
+                                                                                class="hidden line-clamp min-w-40 w-80 sm:block">
+                                                                                Fields Description
+                                                                            </div>
+                                                                            <div
+                                                                                class="hidden line-clamp min-w-40 w-full sm:block">
+                                                                                Selected Fields Name
+                                                                            </div>
+                                                                        </div>
+                                                                    </ng-container>
+                                                                </ng-container>
+                                                            </ng-container>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="flex justify-end mt-5 pt-5">
+                                            <button class="fuse-mat-button-large" [color]="'secondary'"
+                                                [matTooltip]="'Back To Step 2'" mat-flat-button (click)="goToStep2()">
+                                                <mat-icon class="icon-size-7" [svgIcon]="'heroicons_solid:arrow-left'">
+                                                </mat-icon>
+                                                <span class="text-2xl ml-2">Back</span>
+                                            </button>
+                                            <button class="fuse-mat-button-large ml-2" [color]="'primary'"
+                                                [matTooltip]="'Go To Step 4'" mat-flat-button
+                                                [disabled]="questionnairesForm.get('step3').invalid"
+                                                (click)="goToStep4()">
+                                                <span class="text-2xl ml-2">Next</span>
+                                                <mat-icon class="icon-size-7" [svgIcon]="'heroicons_solid:arrow-right'">
+                                                </mat-icon>
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </ng-container>
+                            <ng-container *ngIf="step4">
+                                <div class="pt-15">
+                                    <span class="text-7xl font-bold">
+                                        Inventory Regional Settings
+                                    </span>
+                                </div>
+                                <div class="mt-5">
+                                    <span class="font-semibold text-secondary text-2xl">
+                                        The term "Inventory Regional Settings" typically refers to the configuration or
+                                        settings related to the management of
+                                        inventory within a specific region or locale.
+                                    </span>
+                                </div>
+                                <div class="pt-10">
+                                    <form [formGroup]="questionnairesForm.get('step4')">
+                                        <div class="p-3 flex flex-col gap-1">
+                                            <div class="flex">
+                                                <mat-icon class="icon-size-5 mr-2 mt-1"
+                                                    [svgIcon]="'heroicons_solid:clock'">
+                                                </mat-icon>
+                                                <span class="text-xl font-bold">Timezone</span>
+                                            </div>
+                                            <span class="text-md text-secondary line-clamp">Timezone setting provides
+                                                the
+                                                flexibility to adjust
+                                                your
+                                                system's time display to match your geographical location or
+                                                operational preferences</span>
+                                            <select2 class="py-2 w-full h-15 mb-1 mt-2" overlap listPosition="auto"
+                                                placeholder="Select Timezone" formControlName="defaultTimeZone"
+                                                resettable [data]="timezones" minCountForSearch="1"
+                                                noResultMessage="no found result">
+                                            </select2>
+                                        </div>
+
+                                        <div class="p-3 flex flex-col gap-1">
+                                            <div class="flex">
+                                                <mat-icon class="icon-size-5 mr-2 mt-1"
+                                                    [svgIcon]="'heroicons_solid:currency-dollar'">
+                                                </mat-icon>
+                                                <span class="text-xl font-bold">Currency</span>
+                                            </div>
+                                            <span class="text-md text-secondary line-clamp">A currency symbol or
+                                                currency
+                                                sign
+                                                is a
+                                                graphic
+                                                symbol used to denote a currency unit. Usually it is defined by a
+                                                monetary authority</span>
+                                            <mat-form-field class="mt-2 w-full">
+                                                <mat-icon class="icon-size-7"
+                                                    [svgIcon]="'heroicons_outline:currency-dollar'">
+                                                </mat-icon>
+                                                <mat-select class="h-15" formControlName="defaultCurrencyFormat"
+                                                    [value]="'$'">
+                                                    <mat-option [value]="'$'"> $ Dollar</mat-option>
+                                                    <mat-option [value]="'€'"> € Euro</mat-option>
+                                                    <mat-option [value]="'£'"> £ Pound</mat-option>
+                                                    <mat-option [value]="'₹'"> ₹ Rupee</mat-option>
+                                                </mat-select>
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="p-3 flex flex-col gap-1">
+                                            <div class="flex">
+                                                <mat-icon class="icon-size-5 mr-2 mt-1"
+                                                    [svgIcon]="'heroicons_solid:calendar'">
+                                                </mat-icon>
+                                                <span class="text-xl font-bold">Date</span>
+                                            </div>
+                                            <span class="text-md text-secondary line-clamp">Date setting simplifies the
+                                                process
+                                                of
+                                                configuring
+                                                and
+                                                customizing the date
+                                                format to suit your specific needs, ensuring
+                                                accurate and user-friendly record-keeping.</span>
+                                            <mat-form-field class="w-full">
+                                                <!-- <mat-label>Date Format</mat-label> -->
+                                                <mat-icon class="icon-size-7" svgIcon="heroicons_outline:calendar">
+                                                </mat-icon>
+                                                <mat-select class="h-15" formControlName="defaultdateTimeFormat">
+                                                    <mat-option [value]="'MM/DD/yyyy'">MM/DD/YYYY</mat-option>
+                                                    <mat-option [value]="'yyyy/MM/DD'">YYYY/MM/DD</mat-option>
+                                                    <mat-option [value]="'DD/MM/yyyy'">DD/MM/YYYY</mat-option>
+                                                    <mat-option [value]="'MM-DD-yyyy'">MM-DD-YYYY</mat-option>
+                                                    <mat-option [value]="'yyyy-MM-DD'">YYYY-MM-DD</mat-option>
+                                                    <mat-option [value]="'DD-MM-yyyy'">DD-MM-YYYY</mat-option>
+                                                </mat-select>
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="w-full rounded-lg">
+                                            <div class="p-3 flex flex-col gap-1">
+                                                <div class="flex">
+                                                    <mat-icon class="icon-size-5 mr-2 mt-1"
+                                                        [svgIcon]="'heroicons_solid:scale'">
+                                                    </mat-icon>
+                                                    <span class="text-xl font-bold">Weight</span>
+                                                </div>
+                                                <span class="text-md text-secondary line-clamp">Weight unit setting
+                                                    allows
+                                                    users
+                                                    to
+                                                    define their
+                                                    preferred unit
+                                                    of measurement for weighing items, ensuring uniformity and precision
+                                                    in
+                                                    inventory and shipping
+                                                    processes.</span>
+                                                <select2 class="py-2 mb-1 w-full" overlap listPosition="auto"
+                                                    placeholder="Select Weight Unit" formControlName="defaultWeight"
+                                                    resettable [data]="weightUnits" minCountForSearch="1"
+                                                    noResultMessage="no found result">
+                                                </select2>
+                                            </div>
+                                        </div>
+                                        <div class="flex justify-end mt-5">
+                                            <button class="fuse-mat-button-large" [color]="'secondary'"
+                                                [matTooltip]="'Back To Step 3'" mat-flat-button (click)="goToStep3()">
+                                                <mat-icon class="icon-size-7" [svgIcon]="'heroicons_solid:arrow-left'">
+                                                </mat-icon>
+                                                <span class="text-2xl ml-2">Back</span>
+                                            </button>
+                                            <button [disabled]="questionnairesForm.get('step4').invalid"
+                                                class="fuse-mat-button-large ml-2" [color]="'primary'"
+                                                [matTooltip]="'Go To Step 5'" mat-flat-button (click)="goToStep5()">
+                                                <span class="text-2xl  ml-2">Next</span>
+                                                <mat-icon class="icon-size-7" [svgIcon]="'heroicons_solid:arrow-right'">
+                                                </mat-icon>
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </ng-container>
+                            <ng-container *ngIf="step5">
+                                <div class="pt-15">
+                                    <span class="text-7xl font-bold">
+                                        Advanced Settings
+                                    </span>
+                                </div>
+                                <div class="mt-5">
+                                    <span class="font-semibold text-secondary text-2xl">
+                                        "Advanced settings" typically refers to a set of configuration options or
+                                        parameters within a software application that
+                                        allow users to fine-tune and customize features beyond the basic or standard
+                                        settings.
+                                    </span>
+                                </div>
+                                <div class="pt-10">
+                                    <form [formGroup]="questionnairesForm.get('step5')">
+
+                                        <ng-container>
+
+                                            <div class="w-full mb-3">
+                                                <div class="flex">
+                                                    <mat-icon class="mt-1 mr-1 icon-size-7">build</mat-icon>
+                                                    <div class="text-3xl font-extrabold">Theme Settings</div>
+                                                </div>
+                                                <div class="text-secondary text-lg">Keep your account more fexiable with
+                                                    following
+                                                    preferences.</div>
+                                            </div>
+
+                                            <div
+                                                class="grid grid-cols-2 pt-3 lg:grid-cols-4 sm:grid-cols-3 gap-3 mt-6 w-full lg:max-w-180">
+                                                <ng-container *ngFor="let theme of config.themes">
+                                                    <div class="flex items-center justify-center px-5 py-4 rounded-lg cursor-pointer ring-inset ring-primary bg-card"
+                                                        [class.ring-2]="config.theme === theme.id" [ngClass]="theme.id"
+                                                        (click)="setTheme(theme.id)">
+                                                        <div class="flex-0 w-4 h-4 rounded-full bg-primary"></div>
+                                                        <div class="ml-2.5 font-medium leading-5 truncate"
+                                                            [class.text-secondary]="config.theme !== theme.id">
+                                                            {{theme.name}}
+                                                        </div>
+                                                    </div>
+                                                </ng-container>
+                                            </div>
+
+
+
+                                        </ng-container>
+
+
+
+                                        <div class="flex justify-end mt-5">
+                                            <button class="fuse-mat-button-large" [color]="'secondary'"
+                                                [matTooltip]="'Back To Step 4'" mat-flat-button (click)="goToStep4()">
+                                                <mat-icon class="icon-size-7" [svgIcon]="'heroicons_solid:arrow-left'">
+                                                </mat-icon>
+                                                <span class="text-2xl ml-2">Back</span>
+                                            </button>
+                                            <button class="fuse-mat-button-large ml-2" [color]="'primary'"
+                                                [matTooltip]="'Submit'" mat-flat-button
+                                                (click)="saveOrganizationWithInventory()">
+                                                <span class="text-2xl  ml-2">Submit</span>
+                                                <mat-icon class="icon-size-7" [svgIcon]="'heroicons_solid:arrow-right'">
+                                                </mat-icon>
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </ng-container>
+                        </div>
+
+                    </div>
+                </div>
+            </ng-container>
+
+        </mat-drawer-content>
+    </mat-drawer-container>
+</div>
